@@ -9,7 +9,6 @@
 #import <UIKit/UIKit.h>
 
 #import "TableFormDelegate.h"
-#import "TableFormCellDelegate.h"
 #import "TableFormItem.h"
 #import "TableFormSection.h"
 #import "TableFormCell.h"

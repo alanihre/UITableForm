@@ -146,7 +146,7 @@
     }
 }
 
-- (float)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     TableFormItem *formItem = [[[sections objectAtIndex:indexPath.section] items] objectAtIndex:indexPath.row];
     switch (formItem.type) {
         case TableFormItemTypeMultipleSelection:
@@ -206,7 +206,7 @@
     [(TableFormSection *)[sections objectAtIndex:sectionIndex] addItem:formItem];
     int rowIndex = 0;
     if([[[sections objectAtIndex:sectionIndex] items] count] != 0){
-        rowIndex = [[[sections objectAtIndex:sectionIndex] items] count]-1;
+        rowIndex = [[[sections objectAtIndex:sectionIndex] items] count]-1.0;
     }
     
     if(animated == YES){

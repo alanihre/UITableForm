@@ -15,7 +15,7 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zIW-sS-jun">
-                        <rect key="frame" x="20" y="7" width="280" height="30"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <state key="normal" title="Button">
                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -26,9 +26,10 @@
                     </button>
                 </subviews>
                 <constraints>
-                    <constraint firstAttribute="centerY" secondItem="zIW-sS-jun" secondAttribute="centerY" id="3JS-N9-OxM"/>
-                    <constraint firstItem="zIW-sS-jun" firstAttribute="leading" secondItem="cXn-4M-0gJ" secondAttribute="leading" constant="20" id="6vK-42-4kf"/>
-                    <constraint firstAttribute="trailing" secondItem="zIW-sS-jun" secondAttribute="trailing" constant="20" id="XxR-BA-fvj"/>
+                    <constraint firstItem="zIW-sS-jun" firstAttribute="top" secondItem="cXn-4M-0gJ" secondAttribute="top" id="EAm-IH-8hg"/>
+                    <constraint firstItem="zIW-sS-jun" firstAttribute="leading" secondItem="cXn-4M-0gJ" secondAttribute="leading" id="OlS-jQ-orH"/>
+                    <constraint firstAttribute="trailing" secondItem="zIW-sS-jun" secondAttribute="trailing" id="PI5-WK-gxX"/>
+                    <constraint firstAttribute="bottom" secondItem="zIW-sS-jun" secondAttribute="bottom" id="j4e-JO-h7q"/>
                 </constraints>
             </tableViewCellContentView>
             <connections>

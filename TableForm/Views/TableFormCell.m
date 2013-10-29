@@ -144,7 +144,7 @@
                 if (formItem.title != nil) {
                     [titleLabel setText:formItem.title];
                 }
-                [(UISegmentedControl *)inputElement setSegmentedControlStyle:formItem.segmentedControlStyle];
+                [(UISegmentedControl *)inputElement setSegmentedControlStyle:formItem.segmentedControlStyle]; //For older iOS versions
                 [(UISegmentedControl *)inputElement removeAllSegments];
                 for (int segment=0; segment<[formItem.avalibleValues count]; segment++) {
                     [(UISegmentedControl *)inputElement insertSegmentWithTitle:[formItem.avalibleValues objectAtIndex:segment] atIndex:segment animated:NO];
@@ -217,7 +217,7 @@
             if (formItem.avalibleValues != nil) {
                 [formItem setValue:[formItem.avalibleValues objectAtIndex:[(UISegmentedControl *)sender selectedSegmentIndex]]];
             }else{
-                [formItem setValue:[NSNumber numberWithInt:[(UISegmentedControl *)sender selectedSegmentIndex]]];
+                [formItem setValue:[NSNumber numberWithInteger:[(UISegmentedControl *)sender selectedSegmentIndex]]];
             }
         }
         [valueLabel setText:formItem.value];
