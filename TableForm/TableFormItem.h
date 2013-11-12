@@ -46,6 +46,8 @@ typedef NS_ENUM(NSInteger, TableFormItemType) {
 @property (nonatomic, strong) NSNumber *maxValue;
 @property (nonatomic, strong) NSNumber *step;
 
+@property (nonatomic) UIKeyboardType keyboardType;
+
 @property (assign, nonatomic) TableFormItemType type;
 
 - (id)initWithType:(TableFormItemType)theType;

@@ -33,6 +33,7 @@
             case TableFormItemTypeTextField:{
                 [(UITextField *)inputElement setPlaceholder:formItem.title];
                 [(UITextField *)inputElement setText:formItem.value];
+                [(UITextField *)inputElement setKeyboardType:formItem.keyboardType];
                 break;
             }
             case TableFormItemTypeCheckmark:{
