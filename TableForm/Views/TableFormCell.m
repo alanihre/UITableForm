@@ -71,8 +71,8 @@
                     [valueLabel setText:[formItem.dateFormatter stringFromDate:formItem.value]];
                 }else{
                     NSString *dateString = [NSDateFormatter localizedStringFromDate:formItem.value
-                                                   dateStyle:NSDateFormatterShortStyle
-                                                   timeStyle:NSDateFormatterShortStyle];
+                                                                          dateStyle:NSDateFormatterShortStyle
+                                                                          timeStyle:NSDateFormatterShortStyle];
                     [valueLabel setText:dateString];
                 }
                 break;
@@ -95,7 +95,11 @@
                     }
                 }
                 [titleLabel setText:formItem.title];
-                [valueLabel setText:[formItem.value stringValue]];
+                if([formItem.value isKindOfClass:[NSString class]]){
+                    [valueLabel setText:formItem.value];
+                }else{
+                    [valueLabel setText:[formItem.value stringValue]];
+                }
                 break;
             }
             case TableFormItemTypeSlider:{
@@ -105,7 +109,7 @@
                 if(formItem.maxValue != nil){
                     [(UISlider *)inputElement setMaximumValue:[formItem.maxValue floatValue]];
                 }
-              
+                
                 if(formItem.value != nil){
                     [(UISlider *)inputElement setValue:[formItem.value floatValue]];
                 }else{
@@ -135,7 +139,7 @@
                 [valueLabel setText:[formItem.value stringValue]];
                 break;
             }
-
+                
             case TableFormItemTypeValueLabel:{
                 [titleLabel setText:formItem.title];
                 [valueLabel setText:[formItem.value stringValue]];
