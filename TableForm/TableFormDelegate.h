@@ -21,7 +21,7 @@
 
 - (void)tableForm:(TableForm *)tableForm editingBeganForFormItem:(TableFormItem *)formItem;
 
-- (void)tableForm:(TableForm *)tableForm editingEndend:(TableFormItem *)formItem;
+- (void)tableForm:(TableForm *)tableForm editingEndedForFormItem:(TableFormItem *)formItem;
 
 - (void)tableForm:(TableForm *)tableForm didSelectCellForFormItem:(TableFormItem *)formItem;
 

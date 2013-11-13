@@ -19,7 +19,7 @@
 
 - (void)editingBeganForFormItem:(TableFormItem *)formItem;
 
-- (void)editingEndend:(TableFormItem *)formItem;
+- (void)editingEndedForFormItem:(TableFormItem *)formItem;
 
 @end
 

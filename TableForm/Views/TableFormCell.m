@@ -178,7 +178,7 @@
 
 - (void)textFieldDidEndEditing:(UITextField *)textField{
     [formItem setValue:textField.text];
-    [self.formDelegate editingEndend:formItem];
+    [self.formDelegate editingEndedForFormItem:formItem];
 }
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string{
@@ -192,7 +192,7 @@
 }
 
 - (IBAction)buttonClicked:(id)sender{
-    [self.formDelegate editingEndend:formItem];
+    [self.formDelegate editingEndedForFormItem:formItem];
 }
 
 - (IBAction)valueChanged:(id)sender{

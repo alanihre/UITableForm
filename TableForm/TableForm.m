@@ -129,7 +129,8 @@
     
     [self deselectRowAtIndexPath:indexPath animated:YES];
     
-    [self.formDelegate tableForm:self didSelectCellForFormItem:formItem];
+    if ([self.formDelegate respondsToSelector:@selector(tableForm:didSelectCellForFormItem:)])
+        [self.formDelegate tableForm:self didSelectCellForFormItem:formItem];
     
     if(formItem.expandable == YES){
         if(formItem.expanded == YES){
@@ -258,18 +259,22 @@
 }
 
 - (void)editingBeganForFormItem:(TableFormItem *)formItem{
-    [self.formDelegate tableForm:self editingBeganForFormItem:formItem];
+    if ([self.formDelegate respondsToSelector:@selector(tableForm:editingBeganForFormItem:)])
+        [self.formDelegate tableForm:self editingBeganForFormItem:formItem];
 }
 
 - (void)valueChangedForFormItem:(TableFormItem *)formItem{
-    [self.formDelegate tableForm:self valueChangedForFormItem:formItem];
+    if ([self.formDelegate respondsToSelector:@selector(tableForm:valueChangedForFormItem:)])
+        [self.formDelegate tableForm:self valueChangedForFormItem:formItem];
 }
 
-- (void)editingEndend:(TableFormItem *)formItem{
+- (void)editingEndedForFormItem:(TableFormItem *)formItem{
     if(formItem.type == TableFormItemTypeButton){
-        [self.formDelegate tableForm:self didSelectCellForFormItem:formItem];
+        if ([self.formDelegate respondsToSelector:@selector(tableForm:didSelectCellForFormItem:)])
+            [self.formDelegate tableForm:self didSelectCellForFormItem:formItem];
     }else{
-        [self.formDelegate tableForm:self editingEndend:formItem];
+        if ([self.formDelegate respondsToSelector:@selector(tableForm:editingEndedForFormItem:)])
+            [self.formDelegate tableForm:self editingEndedForFormItem:formItem];
     }
 }
 

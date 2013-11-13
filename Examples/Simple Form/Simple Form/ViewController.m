@@ -58,7 +58,7 @@
 
 }
 
-- (void)tableForm:(TableForm *)tableForm editingEndend:(TableFormItem *)formItem{
+- (void)tableForm:(TableForm *)tableForm editingEndedForFormItem:(TableFormItem *)formItem{
 
 }
 
@@ -67,6 +67,10 @@
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Form submitted" message:@"The for was successfully submitted" delegate:self cancelButtonTitle:@"Close" otherButtonTitles:nil, nil];
         [alert show];
     }
+}
+
+- (void)tableForm:(TableForm *)tableForm valueChangedForFormItem:(TableFormItem *)formItem{
+    
 }
 
 - (void)didReceiveMemoryWarning

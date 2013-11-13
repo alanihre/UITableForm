@@ -11,6 +11,6 @@
 
 @interface ViewController : UITableViewController <TableFormDelegate>
 
-@property(nonatomic,retain) TableForm *tableView;
+@property (nonatomic,retain) TableForm *tableView;
 
 @end
