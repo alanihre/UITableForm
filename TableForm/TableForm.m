@@ -26,6 +26,7 @@
 
 - (void)initForm{
     sections = [NSMutableArray new];
+    formItems = [NSMutableDictionary new];
     self.delegate = self;
     self.dataSource = self;
     
@@ -43,12 +44,8 @@
         forCellReuseIdentifier:@"TableFormCellStepper"];
 }
 
-- (NSArray *)formItems{
-    NSMutableArray *formItemsTemp = [NSMutableArray new];
-    for (TableFormSection *section in sections) {
-        [formItemsTemp addObjectsFromArray:[section items]];
-    }
-    return [NSArray arrayWithArray:formItemsTemp];
+- (NSDictionary *)formItems{
+    return [NSDictionary dictionaryWithDictionary:formItems];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
@@ -205,6 +202,8 @@
     }
     
     [(TableFormSection *)[sections objectAtIndex:sectionIndex] addItem:formItem];
+    [formItems setObject:formItem forKey:formItem.key];
+    
     int rowIndex = 0;
     if([[[sections objectAtIndex:sectionIndex] items] count] != 0){
         rowIndex = [[[sections objectAtIndex:sectionIndex] items] count]-1.0;
@@ -275,6 +274,15 @@
     }else{
         if ([self.formDelegate respondsToSelector:@selector(tableForm:editingEndedForFormItem:)])
             [self.formDelegate tableForm:self editingEndedForFormItem:formItem];
+    }
+}
+
+- (id)getValueForFormItemWithKey:(NSString *)key{
+    if((TableFormItem*)[[self formItems] objectForKey:key] != nil){
+        return [(TableFormItem*)[[self formItems] objectForKey:key] value];
+    }else{
+        NSLog(@"No TableFormItem is registered with the key %@.", key);
+        return nil;
     }
 }
 

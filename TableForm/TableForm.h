@@ -13,11 +13,13 @@
 #import "TableFormSection.h"
 #import "TableFormCell.h"
 
-@interface TableForm : UITableView <UITableViewDelegate, UITableViewDataSource, TableFormCellDelegate>
+@interface TableForm : UITableView <UITableViewDelegate, UITableViewDataSource, TableFormCellDelegate>{
+    NSMutableDictionary *formItems;
+}
 
 @property (nonatomic, strong) NSMutableArray *sections;
 
-@property (nonatomic, strong, readonly) NSArray *formItems;
+@property (nonatomic, strong, readonly) NSDictionary *formItems;
 
 @property (retain) NSObject <TableFormDelegate> *formDelegate;
 
@@ -31,6 +33,8 @@
 - (void)addSection:(TableFormSection *)section;
 - (void)addSection:(TableFormSection *)section animated:(BOOL)animated;
 - (void)setTitle:(NSString *)title forSectionAtIndex:(int)sectionIndex;
+
+- (id)getValueForFormItemWithKey:(NSString *)key;
 
 - (id)init;
 
