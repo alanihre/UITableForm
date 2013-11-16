@@ -15,9 +15,8 @@
 
 @interface TableForm : UITableView <UITableViewDelegate, UITableViewDataSource, TableFormCellDelegate>{
     NSMutableDictionary *formItems;
+    NSMutableArray *sections;
 }
-
-@property (nonatomic, strong) NSMutableArray *sections;
 
 @property (nonatomic, strong, readonly) NSDictionary *formItems;
 
