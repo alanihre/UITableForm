@@ -34,7 +34,7 @@
 - (void)addSection:(TableFormSection *)section animated:(BOOL)animated;
 - (void)setTitle:(NSString *)title forSectionAtIndex:(int)sectionIndex;
 
-- (id)getValueForFormItemWithKey:(NSString *)key;
+- (id)valueForFormItemWithKey:(NSString *)key;
 
 - (id)init;
 

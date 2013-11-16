@@ -277,7 +277,7 @@
     }
 }
 
-- (id)getValueForFormItemWithKey:(NSString *)key{
+- (id)valueForFormItemWithKey:(NSString *)key{
     if((TableFormItem*)[[self formItems] objectForKey:key] != nil){
         return [(TableFormItem*)[[self formItems] objectForKey:key] value];
     }else{
