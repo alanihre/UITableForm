@@ -32,15 +32,15 @@
     [self registerNib:[UINib nibWithNibName:@"TableFormCellTextField" bundle:nil] forCellReuseIdentifier:@"TableFormCellTextField"];
     [self registerNib:[UINib nibWithNibName:@"TableFormCellCheckmark" bundle:nil] forCellReuseIdentifier:@"TableFormCellCheckmark"];
     [self registerNib:[UINib nibWithNibName:@"TableFormCellButton" bundle:nil]
-        forCellReuseIdentifier:@"TableFormCellButton"];
+forCellReuseIdentifier:@"TableFormCellButton"];
     [self registerNib:[UINib nibWithNibName:@"TableFormCellDatePicker" bundle:nil] forCellReuseIdentifier:@"TableFormCellDatePicker"];
     [self registerNib:[UINib nibWithNibName:@"TableFormCellMultipleSelection" bundle:nil] forCellReuseIdentifier:@"TableFormCellMultipleSelection"];
     [self registerNib:[UINib nibWithNibName:@"TableFormCellSegmented" bundle:nil] forCellReuseIdentifier:@"TableFormCellSegmented"];
     [self registerNib:[UINib nibWithNibName:@"TableFormCellSegmented+Title" bundle:nil] forCellReuseIdentifier:@"TableFormCellSegmented+Title"];
     [self registerNib:[UINib nibWithNibName:@"TableFormCellSlider" bundle:nil]
-        forCellReuseIdentifier:@"TableFormCellSlider"];
+forCellReuseIdentifier:@"TableFormCellSlider"];
     [self registerNib:[UINib nibWithNibName:@"TableFormCellStepper" bundle:nil]
-        forCellReuseIdentifier:@"TableFormCellStepper"];
+forCellReuseIdentifier:@"TableFormCellStepper"];
 }
 
 - (NSDictionary *)formItems{
@@ -98,7 +98,7 @@
         default:
             break;
     }
-
+    
     TableFormCell *tableFormCell = [self dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
     
     //---create new cell if no reusable cell is available---
@@ -200,6 +200,7 @@
         [self registerNib:formItem.customCellNib forCellReuseIdentifier:formItem.customCellReuseIdentifier];
     }
     
+    formItem.indexPath = [NSIndexPath indexPathForItem:[[(TableFormSection *)[sections objectAtIndex:sectionIndex] items] count] inSection:sectionIndex];
     [(TableFormSection *)[sections objectAtIndex:sectionIndex] addItem:formItem];
     [formItems setObject:formItem forKey:formItem.key];
     
@@ -227,9 +228,9 @@
 
 - (void)addSection:(TableFormSection *)section animated:(BOOL)animated{
     [sections addObject:section];
-    int sectionIndex = 0;
+    NSInteger sectionIndex = 0;
     if([sections count] != 0){
-        sectionIndex = [sections count]-1;
+        sectionIndex = [sections count] - 1;
     }
     
     [self beginUpdates];
@@ -277,12 +278,32 @@
 }
 
 - (id)valueForFormItemWithKey:(NSString *)key{
-    if((TableFormItem*)[[self formItems] objectForKey:key] != nil){
-        return [(TableFormItem*)[[self formItems] objectForKey:key] value];
+    if((TableFormItem*)[formItems objectForKey:key] != nil){
+        return [(TableFormItem*)[formItems objectForKey:key] value];
     }else{
         NSLog(@"No TableFormItem is registered with the key %@.", key);
         return nil;
     }
+}
+
+- (void)updateFormItemWithKey:(NSString *)key withFormItem:(TableFormItem *)formItem{
+    [self updateFormItemWithKey:key withFormItem:formItem animated:NO];
+}
+
+- (void)updateFormItemWithKey:(NSString *)key withFormItem:(TableFormItem *)formItem animated:(BOOL)animated{
+    if((TableFormItem*)[formItems objectForKey:key] != nil){
+        NSIndexPath *indexPath = [(TableFormItem*)[formItems objectForKey:key] indexPath];
+        [[(TableFormSection *)[sections objectAtIndex:indexPath.section] items] replaceObjectAtIndex:indexPath.item withObject:formItem];
+        [formItems setObject:formItem forKey:key];
+        if(animated == YES){
+            [self reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+        }else{
+            [self reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+        }
+    }else{
+        NSLog(@"No TableFormItem is registered with the key %@.", key);
+    }
+    
 }
 
 @end

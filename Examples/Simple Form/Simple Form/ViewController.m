@@ -66,7 +66,7 @@
     if([formItem.key isEqualToString:@"submit"]){
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Form submitted" message:@"The for was successfully submitted" delegate:self cancelButtonTitle:@"Close" otherButtonTitles:nil, nil];
         [alert show];
-        NSLog(@"%@", [tableForm getValueForFormItemWithKey:@"firstName"]);
+        NSLog(@"%@", [tableForm valueForFormItemWithKey:@"firstName"]);
     }
 }
 

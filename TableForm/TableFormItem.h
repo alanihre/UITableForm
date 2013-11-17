@@ -52,4 +52,6 @@ typedef NS_ENUM(NSInteger, TableFormItemType) {
 
 - (id)initWithType:(TableFormItemType)theType;
 
+@property (nonatomic, strong) NSIndexPath *indexPath;
+
 @end
