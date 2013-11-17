@@ -32,15 +32,15 @@
     [self registerNib:[UINib nibWithNibName:@"TableFormCellTextField" bundle:nil] forCellReuseIdentifier:@"TableFormCellTextField"];
     [self registerNib:[UINib nibWithNibName:@"TableFormCellCheckmark" bundle:nil] forCellReuseIdentifier:@"TableFormCellCheckmark"];
     [self registerNib:[UINib nibWithNibName:@"TableFormCellButton" bundle:nil]
-forCellReuseIdentifier:@"TableFormCellButton"];
+        forCellReuseIdentifier:@"TableFormCellButton"];
     [self registerNib:[UINib nibWithNibName:@"TableFormCellDatePicker" bundle:nil] forCellReuseIdentifier:@"TableFormCellDatePicker"];
     [self registerNib:[UINib nibWithNibName:@"TableFormCellMultipleSelection" bundle:nil] forCellReuseIdentifier:@"TableFormCellMultipleSelection"];
     [self registerNib:[UINib nibWithNibName:@"TableFormCellSegmented" bundle:nil] forCellReuseIdentifier:@"TableFormCellSegmented"];
     [self registerNib:[UINib nibWithNibName:@"TableFormCellSegmented+Title" bundle:nil] forCellReuseIdentifier:@"TableFormCellSegmented+Title"];
     [self registerNib:[UINib nibWithNibName:@"TableFormCellSlider" bundle:nil]
-forCellReuseIdentifier:@"TableFormCellSlider"];
+        forCellReuseIdentifier:@"TableFormCellSlider"];
     [self registerNib:[UINib nibWithNibName:@"TableFormCellStepper" bundle:nil]
-forCellReuseIdentifier:@"TableFormCellStepper"];
+        forCellReuseIdentifier:@"TableFormCellStepper"];
 }
 
 - (NSDictionary *)formItems{
