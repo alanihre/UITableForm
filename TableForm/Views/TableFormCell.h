@@ -12,7 +12,6 @@
 
 @interface TableFormCell : UITableViewCell <UITextFieldDelegate, UIPickerViewDelegate, UIPickerViewDataSource>{
     IBOutlet UILabel *titleLabel;
-    IBOutlet id inputElement;
     IBOutlet UILabel *valueLabel;
 }
 
@@ -21,6 +20,8 @@
 @property (nonatomic, retain) TableFormItem *formItem;
 
 @property (nonatomic, retain) NSString *title;
+
+@property (nonatomic) IBOutlet id inputElement;
 
 -(id)initWithReuseIdentifier:(NSString *)theReuseIdentifier;
 

@@ -7,9 +7,14 @@
 //
 
 #import "TableForm.h"
-#define SYSTEM_VERSION_LESS_THAN(v)                 ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] == NSOrderedAscending)
+#define SYSTEM_VERSION_LESS_THAN(v) ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] == NSOrderedAscending)
+#define goToNextFieldAutomatically YES
 
-@implementation TableForm
+@implementation TableForm{
+    NSMutableDictionary *formItems;
+    NSMutableArray *sections;
+    NSIndexPath *itemWithDoneKey;
+}
 
 - (id)init{
     self = [super init];
@@ -201,6 +206,21 @@
     }
     
     formItem.indexPath = [NSIndexPath indexPathForItem:[[(TableFormSection *)[sections objectAtIndex:sectionIndex] items] count] inSection:sectionIndex];
+    
+    if (goToNextFieldAutomatically == YES && formItem.type == TableFormItemTypeTextField) {
+        int itemCount = [[[sections objectAtIndex:formItem.indexPath.section] items] count];
+        
+        if (itemCount == 0 || formItem.indexPath.row == itemCount) {
+            formItem.keyboardReturnKeyType = UIReturnKeyDone;
+            if (itemWithDoneKey) {
+                [(TableFormItem* )[[[sections objectAtIndex:itemWithDoneKey.section] items] objectAtIndex:itemWithDoneKey.row] setKeyboardReturnKeyType:UIReturnKeyNext];
+            }
+            itemWithDoneKey = formItem.indexPath;
+        }else{
+            formItem.keyboardReturnKeyType = UIReturnKeyNext;
+        }
+    }
+    
     [(TableFormSection *)[sections objectAtIndex:sectionIndex] addItem:formItem];
     [formItems setObject:formItem forKey:formItem.key];
     
@@ -258,6 +278,8 @@
 }
 
 - (void)editingBeganForFormItem:(TableFormItem *)formItem{
+    [self scrollToRowAtIndexPath:formItem.indexPath atScrollPosition:UITableViewScrollPositionTop animated:YES];
+
     if ([self.formDelegate respondsToSelector:@selector(tableForm:editingBeganForFormItem:)])
         [self.formDelegate tableForm:self editingBeganForFormItem:formItem];
 }
@@ -292,6 +314,21 @@
 
 - (void)updateFormItemWithKey:(NSString *)key withFormItem:(TableFormItem *)formItem animated:(BOOL)animated{
     if((TableFormItem*)[formItems objectForKey:key] != nil){
+        
+        if (goToNextFieldAutomatically == YES && formItem.type == TableFormItemTypeTextField) {
+            int itemCount = [[[sections objectAtIndex:formItem.indexPath.section] items] count];
+            
+            if (itemCount == 0 || formItem.indexPath.row == itemCount) {
+                formItem.keyboardReturnKeyType = UIReturnKeyDone;
+                if (itemWithDoneKey) {
+                    [(TableFormItem* )[[[sections objectAtIndex:itemWithDoneKey.section] items] objectAtIndex:itemWithDoneKey.row] setKeyboardReturnKeyType:UIReturnKeyNext];
+                }
+                itemWithDoneKey = formItem.indexPath;
+            }else{
+                formItem.keyboardReturnKeyType = UIReturnKeyNext;
+            }
+        }
+        
         NSIndexPath *indexPath = [(TableFormItem*)[formItems objectForKey:key] indexPath];
         [[(TableFormSection *)[sections objectAtIndex:indexPath.section] items] replaceObjectAtIndex:indexPath.item withObject:formItem];
         [formItems setObject:formItem forKey:key];
@@ -303,7 +340,39 @@
     }else{
         NSLog(@"No TableFormItem is registered with the key %@.", key);
     }
-    
+
+}
+
+- (void)emptyForm{
+    [self emptyFormAnimated:YES];
+}
+
+- (void)emptyFormAnimated:(BOOL)animated{
+    for (TableFormSection *section in sections) {
+        for (TableFormItem *formItem in section.items) {
+            formItem.value = nil;
+            [formItems setValue:formItem forKey:formItem.key];
+        }
+    }
+    if(animated == YES){
+        [self reloadSections:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, sections.count)] withRowAnimation:UITableViewRowAnimationAutomatic];
+    }else{
+        [self reloadSections:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, sections.count)] withRowAnimation:UITableViewRowAnimationNone];
+    }
+}
+
+- (void)returnKeyPressedForFormItem:(TableFormItem *)formItem{
+    if (goToNextFieldAutomatically == YES && formItem.type == TableFormItemTypeTextField) {
+        int itemCount = [[[sections objectAtIndex:formItem.indexPath.section] items] count];
+        
+        [[(TableFormCell *)[self cellForRowAtIndexPath:formItem.indexPath] inputElement] resignFirstResponder];
+
+        if (itemCount != 1 && formItem.indexPath.row != itemCount-1) {
+            NSIndexPath *newIndexPath = [NSIndexPath indexPathForRow:formItem.indexPath.row+1 inSection:formItem.indexPath.section];
+            [self scrollToRowAtIndexPath:newIndexPath atScrollPosition:UITableViewScrollPositionTop animated:YES];
+            [[(TableFormCell *)[self cellForRowAtIndexPath:newIndexPath] inputElement] becomeFirstResponder];
+        }
+    }
 }
 
 @end

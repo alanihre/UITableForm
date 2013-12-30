@@ -21,5 +21,7 @@
 
 - (void)editingEndedForFormItem:(TableFormItem *)formItem;
 
+- (void)returnKeyPressedForFormItem:(TableFormItem *)formItem;
+
 @end
 

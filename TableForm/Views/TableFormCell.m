@@ -8,7 +8,7 @@
 
 #import "TableFormCell.h"
 #import <QuartzCore/QuartzCore.h>
-#define SYSTEM_VERSION_LESS_THAN(v)                 ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] == NSOrderedAscending)
+#define SYSTEM_VERSION_LESS_THAN(v) ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] == NSOrderedAscending)
 
 @implementation TableFormCell
 @synthesize formItem;
@@ -16,7 +16,6 @@
 - (void)awakeFromNib{
     [super awakeFromNib];
 }
-
 
 -(id)initWithReuseIdentifier:(NSString *)theReuseIdentifier{
     self = [super initWithStyle:UITableViewCellStyleDefault reuseIdentifier:theReuseIdentifier];
@@ -31,38 +30,39 @@
         formItem = theFormItem;
         switch (formItem.type) {
             case TableFormItemTypeTextField:{
-                [(UITextField *)inputElement setPlaceholder:formItem.title];
-                [(UITextField *)inputElement setText:formItem.value];
-                [(UITextField *)inputElement setKeyboardType:formItem.keyboardType];
+                [(UITextField *)self.inputElement setPlaceholder:formItem.title];
+                [(UITextField *)self.inputElement setText:formItem.value];
+                [(UITextField *)self.inputElement setKeyboardType:formItem.keyboardType];
+                [(UITextField *)self.inputElement setReturnKeyType:formItem.keyboardReturnKeyType];
                 break;
             }
             case TableFormItemTypeCheckmark:{
                 [titleLabel setText:formItem.title];
                 if([formItem.value boolValue] == YES){
-                    [(UISwitch *)inputElement setOn:YES];
+                    [(UISwitch *)self.inputElement setOn:YES];
                 }else if([formItem.value boolValue] == NO){
-                    [(UISwitch *)inputElement setOn:NO];
+                    [(UISwitch *)self.inputElement setOn:NO];
                 }else{
                     formItem.value = [NSNumber numberWithBool:NO];
-                    [(UISwitch *)inputElement setOn:NO];
+                    [(UISwitch *)self.inputElement setOn:NO];
                 }
                 break;
             }
             case TableFormItemTypeButton:{
-                [(UIButton *)inputElement setTitle:formItem.title forState:UIControlStateNormal];
+                [(UIButton *)self.inputElement setTitle:formItem.title forState:UIControlStateNormal];
                 break;
             }
             case TableFormItemTypeDatePicker:{
                 if(SYSTEM_VERSION_LESS_THAN(@"7.0")){
-                    NSLog(@"TableFormItemTypeDatePicker is not recommended for iOS versions lower than 7.0.");
+                    NSLog(@"TableFormItemTypeDatePicker is not supported for iOS versions lower than 7.0.");
                 }
                 
-                [(UIDatePicker *)inputElement setDatePickerMode:formItem.datePickerMode];
+                [(UIDatePicker *)self.inputElement setDatePickerMode:formItem.datePickerMode];
                 
                 if(formItem.value != nil){
-                    [(UIDatePicker *)inputElement setDate:formItem.value];
+                    [(UIDatePicker *)self.inputElement setDate:formItem.value];
                 }else{
-                    formItem.value = [(UIDatePicker *)inputElement date];
+                    formItem.value = [(UIDatePicker *)self.inputElement date];
                 }
                 
                 [titleLabel setText:formItem.title];
@@ -79,13 +79,13 @@
             }
             case TableFormItemTypeMultipleSelection:{
                 if(SYSTEM_VERSION_LESS_THAN(@"7.0")){
-                    NSLog(@"TableFormItemTypeMultipleSelection is not recommended for iOS versions lower than 7.0.");
+                    NSLog(@"TableFormItemTypeMultipleSelection is not supported for iOS versions lower than 7.0.");
                 }
-                [(UIPickerView *)inputElement reloadComponent:0];
+                [(UIPickerView *)self.inputElement reloadComponent:0];
                 if(formItem.value != nil){
                     for (int r = 0; r<[formItem.avalibleValues count]; r++) {
                         if ([[formItem.avalibleValues objectAtIndex:r] isEqualToString:formItem.value]) {
-                            [(UIPickerView *)inputElement selectRow:r inComponent:0 animated:NO];
+                            [(UIPickerView *)self.inputElement selectRow:r inComponent:0 animated:NO];
                             break;
                         }
                     }
@@ -104,16 +104,16 @@
             }
             case TableFormItemTypeSlider:{
                 if(formItem.minValue != nil){
-                    [(UISlider *)inputElement setMinimumValue:[formItem.minValue floatValue]];
+                    [(UISlider *)self.inputElement setMinimumValue:[formItem.minValue floatValue]];
                 }
                 if(formItem.maxValue != nil){
-                    [(UISlider *)inputElement setMaximumValue:[formItem.maxValue floatValue]];
+                    [(UISlider *)self.inputElement setMaximumValue:[formItem.maxValue floatValue]];
                 }
                 
                 if(formItem.value != nil){
-                    [(UISlider *)inputElement setValue:[formItem.value floatValue]];
+                    [(UISlider *)self.inputElement setValue:[formItem.value floatValue]];
                 }else{
-                    [formItem setValue:[NSNumber numberWithFloat:[(UISlider *)inputElement value]]];
+                    [formItem setValue:[NSNumber numberWithFloat:[(UISlider *)self.inputElement value]]];
                 }
                 [titleLabel setText:formItem.title];
                 [valueLabel setText:[formItem.value stringValue]];
@@ -121,19 +121,19 @@
             }
             case TableFormItemTypeStepper:{
                 if(formItem.minValue != nil){
-                    [(UIStepper *)inputElement setMinimumValue:[formItem.minValue floatValue]];
+                    [(UIStepper *)self.inputElement setMinimumValue:[formItem.minValue floatValue]];
                 }
                 if(formItem.maxValue != nil){
-                    [(UIStepper *)inputElement setMaximumValue:[formItem.maxValue floatValue]];
+                    [(UIStepper *)self.inputElement setMaximumValue:[formItem.maxValue floatValue]];
                 }
                 if(formItem.step != nil){
-                    [(UIStepper *)inputElement setStepValue:[formItem.step floatValue]];
+                    [(UIStepper *)self.inputElement setStepValue:[formItem.step floatValue]];
                 }
                 
                 if(formItem.value != nil){
-                    [(UIStepper *)inputElement setValue:[formItem.value floatValue]];
+                    [(UIStepper *)self.inputElement setValue:[formItem.value floatValue]];
                 }else{
-                    [formItem setValue:[NSNumber numberWithFloat:[(UIStepper *)inputElement value]]];
+                    [formItem setValue:[NSNumber numberWithFloat:[(UIStepper *)self.inputElement value]]];
                 }
                 [titleLabel setText:formItem.title];
                 [valueLabel setText:[formItem.value stringValue]];
@@ -149,15 +149,17 @@
                 if (formItem.title != nil) {
                     [titleLabel setText:formItem.title];
                 }
-                [(UISegmentedControl *)inputElement setSegmentedControlStyle:formItem.segmentedControlStyle]; //For older iOS versions
-                [(UISegmentedControl *)inputElement removeAllSegments];
+                if (SYSTEM_VERSION_LESS_THAN(@"7.0")) {
+                    [(UISegmentedControl *)self.inputElement setSegmentedControlStyle:formItem.segmentedControlStyle]; //For older iOS versions
+                }
+                [(UISegmentedControl *)self.inputElement removeAllSegments];
                 for (int segment=0; segment<[formItem.avalibleValues count]; segment++) {
-                    [(UISegmentedControl *)inputElement insertSegmentWithTitle:[formItem.avalibleValues objectAtIndex:segment] atIndex:segment animated:NO];
+                    [(UISegmentedControl *)self.inputElement insertSegmentWithTitle:[formItem.avalibleValues objectAtIndex:segment] atIndex:segment animated:NO];
                 }
                 if(formItem.value != nil){
                     for (int s = 0; s<[formItem.avalibleValues count]; s++) {
                         if ([[formItem.avalibleValues objectAtIndex:s] isEqualToString:formItem.value]) {
-                            [(UISegmentedControl *)inputElement setSelectedSegmentIndex:s];
+                            [(UISegmentedControl *)self.inputElement setSelectedSegmentIndex:s];
                             break;
                         }
                     }
@@ -173,26 +175,34 @@
 }
 
 - (void)textFieldDidBeginEditing:(UITextField *)textField{
-    [self.formDelegate editingBeganForFormItem:formItem];
+    if ([self.formDelegate respondsToSelector:@selector(editingBeganForFormItem:)])
+        [self.formDelegate editingBeganForFormItem:formItem];
 }
 
 - (void)textFieldDidEndEditing:(UITextField *)textField{
     [formItem setValue:textField.text];
-    [self.formDelegate editingEndedForFormItem:formItem];
+    if ([self.formDelegate respondsToSelector:@selector(editingEndedForFormItem:)])
+        [self.formDelegate editingEndedForFormItem:formItem];
 }
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string{
     [formItem setValue:textField.text];
-    [self.formDelegate valueChangedForFormItem:formItem];
+    if ([self.formDelegate respondsToSelector:@selector(valueChangedForFormItem:)])
+        [self.formDelegate valueChangedForFormItem:formItem];
     return YES;
 }
 
 - (IBAction)textFieldDidEndOnExit:(UITextField *)textField{
-    [textField resignFirstResponder];
+    if ([self.formDelegate respondsToSelector:@selector(returnKeyPressedForFormItem:)]) {
+        [self.formDelegate returnKeyPressedForFormItem:self.formItem];
+    }else{
+        [textField resignFirstResponder];
+    }
 }
 
 - (IBAction)buttonClicked:(id)sender{
-    [self.formDelegate editingEndedForFormItem:formItem];
+    if ([self.formDelegate respondsToSelector:@selector(editingEndedForFormItem:)])
+        [self.formDelegate editingEndedForFormItem:formItem];
 }
 
 - (IBAction)valueChanged:(id)sender{
