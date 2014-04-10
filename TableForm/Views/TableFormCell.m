@@ -26,7 +26,6 @@
 }
 
 - (void)setFormItem:(TableFormItem *)theFormItem{
-    if (![formItem isEqual:theFormItem]) {
         formItem = theFormItem;
         switch (formItem.type) {
             case TableFormItemTypeTextField:{
@@ -34,6 +33,7 @@
                 [(UITextField *)self.inputElement setText:formItem.value];
                 [(UITextField *)self.inputElement setKeyboardType:formItem.keyboardType];
                 [(UITextField *)self.inputElement setReturnKeyType:formItem.keyboardReturnKeyType];
+                [(UITextField *)self.inputElement setSecureTextEntry:formItem.secureTextEntry];
                 break;
             }
             case TableFormItemTypeCheckmark:{
@@ -142,7 +142,13 @@
                 
             case TableFormItemTypeValueLabel:{
                 [titleLabel setText:formItem.title];
-                [valueLabel setText:[formItem.value stringValue]];
+                NSString *value;
+                if ([formItem.value isKindOfClass:[NSString class]]) {
+                    value = formItem.value;
+                }else{
+                    value = [formItem.value stringValue];
+                }
+                [valueLabel setText:value];
                 break;
             }
             case TableFormItemTypeSegmented:{
@@ -166,11 +172,28 @@
                 }
                 break;
             }
+            case TableFormItemTypeCustom:{
+                if (titleLabel) {
+                    [titleLabel setText:self.formItem.title];
+                }
+                if (valueLabel) {
+                    [valueLabel setText:self.formItem.value];
+
+                }
+                if (self.inputElement) {
+                    if ([self.inputElement isKindOfClass:[UITextField class]]) {
+                        [(UITextField *)self.inputElement setText:formItem.value];
+                        [(UITextField *)self.inputElement setKeyboardType:formItem.keyboardType];
+                        [(UITextField *)self.inputElement setReturnKeyType:formItem.keyboardReturnKeyType];
+                        [(UITextField *)self.inputElement setSecureTextEntry:formItem.secureTextEntry];
+                    }
+                }
+     
+                break;
+            }
             default:
                 break;
         }
-    }else{
-        formItem = theFormItem;
     }
 }
 
@@ -193,6 +216,7 @@
 }
 
 - (IBAction)textFieldDidEndOnExit:(UITextField *)textField{
+    [formItem setValue:textField.text];
     if ([self.formDelegate respondsToSelector:@selector(returnKeyPressedForFormItem:)]) {
         [self.formDelegate returnKeyPressedForFormItem:self.formItem];
     }else{

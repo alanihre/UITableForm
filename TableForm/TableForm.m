@@ -24,6 +24,12 @@
     return self;
 }
 
+- (void)removeAllItems{
+    [formItems removeAllObjects];
+    [sections removeAllObjects];
+    [self reloadData];
+}
+
 - (void)awakeFromNib{
     [self initForm];
 }
@@ -46,6 +52,8 @@
         forCellReuseIdentifier:@"TableFormCellSlider"];
     [self registerNib:[UINib nibWithNibName:@"TableFormCellStepper" bundle:nil]
         forCellReuseIdentifier:@"TableFormCellStepper"];
+    [self registerNib:[UINib nibWithNibName:@"TableFormCellValueLabel" bundle:nil]
+        forCellReuseIdentifier:@"TableFormCellValueLabel"];
 }
 
 - (NSDictionary *)formItems{
@@ -88,6 +96,9 @@
             break;
         case TableFormItemTypeStepper:
             CellIdentifier = @"TableFormCellStepper";
+            break;
+        case TableFormItemTypeValueLabel:
+            CellIdentifier = @"TableFormCellValueLabel";
             break;
         case TableFormItemTypeSegmented:{
             if (formItem.title != nil) {
@@ -208,7 +219,7 @@
     formItem.indexPath = [NSIndexPath indexPathForItem:[[(TableFormSection *)[sections objectAtIndex:sectionIndex] items] count] inSection:sectionIndex];
     
     if (goToNextFieldAutomatically == YES && formItem.type == TableFormItemTypeTextField) {
-        int itemCount = [[[sections objectAtIndex:formItem.indexPath.section] items] count];
+        NSInteger itemCount = [[(TableFormSection*)[sections objectAtIndex:formItem.indexPath.section] items] count];
         
         if (itemCount == 0 || formItem.indexPath.row == itemCount) {
             formItem.keyboardReturnKeyType = UIReturnKeyDone;
@@ -247,19 +258,31 @@
 }
 
 - (void)addSection:(TableFormSection *)section animated:(BOOL)animated{
-    [sections addObject:section];
-    NSInteger sectionIndex = 0;
-    if([sections count] != 0){
-        sectionIndex = [sections count] - 1;
+    [self addSection:section animated:YES manualInsertion:NO];
+}
+
+- (void)addSection:(TableFormSection *)section animated:(BOOL)animated manualInsertion:(BOOL)manualInsertion{
+    NSInteger sectionIndex = [sections count];
+    
+    int i = 0;
+    for (TableFormItem *formItem in section.items) {
+        formItem.indexPath = [NSIndexPath indexPathForItem:i inSection:sectionIndex];
+        [formItems setObject:formItem forKey:formItem.key];
+        
+        i++;
     }
     
-    [self beginUpdates];
-    if(animated == YES){
-        [self insertSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationAutomatic];
-    }else{
-        [self insertSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationNone];
+    [sections addObject:section];
+    
+    if (manualInsertion == NO) {
+        [self beginUpdates];
+        if(animated == YES){
+            [self insertSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationAutomatic];
+        }else{
+            [self insertSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationNone];
+        }
+        [self endUpdates];
     }
-    [self endUpdates];
 }
 
 - (void)setTitle:(NSString *)title forSectionAtIndex:(int)sectionIndex{
@@ -303,7 +326,6 @@
     if((TableFormItem*)[formItems objectForKey:key] != nil){
         return [(TableFormItem*)[formItems objectForKey:key] value];
     }else{
-        NSLog(@"No TableFormItem is registered with the key %@.", key);
         return nil;
     }
 }
@@ -316,7 +338,7 @@
     if((TableFormItem*)[formItems objectForKey:key] != nil){
         
         if (goToNextFieldAutomatically == YES && formItem.type == TableFormItemTypeTextField) {
-            int itemCount = [[[sections objectAtIndex:formItem.indexPath.section] items] count];
+            NSInteger itemCount = [[[sections objectAtIndex:formItem.indexPath.section] items] count];
             
             if (itemCount == 0 || formItem.indexPath.row == itemCount) {
                 formItem.keyboardReturnKeyType = UIReturnKeyDone;
@@ -363,7 +385,7 @@
 
 - (void)returnKeyPressedForFormItem:(TableFormItem *)formItem{
     if (goToNextFieldAutomatically == YES && formItem.type == TableFormItemTypeTextField) {
-        int itemCount = [[[sections objectAtIndex:formItem.indexPath.section] items] count];
+        NSInteger itemCount = [[[sections objectAtIndex:formItem.indexPath.section] items] count];
         
         [[(TableFormCell *)[self cellForRowAtIndexPath:formItem.indexPath] inputElement] resignFirstResponder];
 

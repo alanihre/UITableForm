@@ -13,6 +13,7 @@ typedef NS_ENUM(NSInteger, TableFormItemType) {
     TableFormItemTypeDatePicker,
     TableFormItemTypeCheckmark,
     TableFormItemTypeMultipleSelection,
+    TableFormItemTypeMultipleSelectionModal,
     TableFormItemTypeCustom,
     TableFormItemTypeButton,
     TableFormItemTypeValueLabel,
@@ -48,6 +49,7 @@ typedef NS_ENUM(NSInteger, TableFormItemType) {
 
 @property (nonatomic) UIKeyboardType keyboardType;
 @property (nonatomic) UIReturnKeyType keyboardReturnKeyType;
+@property (nonatomic) BOOL secureTextEntry;
 
 @property (assign, nonatomic) TableFormItemType type;
 

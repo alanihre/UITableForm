@@ -15,6 +15,7 @@
  */
 @protocol TableFormCellDelegate
 
+@optional
 - (void)valueChangedForFormItem:(TableFormItem *)formItem;
 
 - (void)editingBeganForFormItem:(TableFormItem *)formItem;

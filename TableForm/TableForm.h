@@ -29,6 +29,7 @@
 - (void)addNewSection; //The methods above automatically creates new sections when necessary
 - (void)addSection:(TableFormSection *)section;
 - (void)addSection:(TableFormSection *)section animated:(BOOL)animated;
+- (void)addSection:(TableFormSection *)section animated:(BOOL)animated manualInsertion:(BOOL)manualInsertion;
 - (void)setTitle:(NSString *)title forSectionAtIndex:(int)sectionIndex;
 
 - (void)updateFormItemWithKey:(NSString *)key withFormItem:(TableFormItem *)formItem;
@@ -38,5 +39,7 @@
 
 - (void)emptyForm;
 - (void)emptyFormAnimated:(BOOL)animated;
+
+- (void)removeAllItems;
 
 @end
